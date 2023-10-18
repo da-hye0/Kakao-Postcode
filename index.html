@@ -38,6 +38,8 @@
         window.webkit.messageHandlers.callBackHandler.postMessage(postData);
       }
 
+      var geocoder = new kakao.maps.services.Geocoder();
+
       var element_layer = document.getElementById("layer");
       function execDaumPostcode() {
         new daum.Postcode({
@@ -49,20 +51,17 @@
             } else if (data.autoJibunAddress == "") {
               jibunAddress = data.jibunAddress;
             }
-            var geocoder = new kakao.maps.services.Geocoder();
-            var x = ""
-            var y = ""
             geocoder.addressSearch(data.roadAddress, (result, status) => {
               if (status === kakao.maps.services.Status.OK) {
                   x = result[0].y // 위도
                   y = result[0].x // 경도
 
                   var postData = {
-                roadAddress: data.roadAddress,
-                jibunAddress: jibunAddress,
-                zonecode: data.zonecode,
-                x: x,
-                y: y
+                  roadAddress: data.roadAddress,
+                  jibunAddress: jibunAddress,
+                  zonecode: data.zonecode,
+                  x: x,
+                  y: y
               };
               window.postMessageToiOS(postData);
               }
