@@ -10,7 +10,7 @@
   <div id = "layer" style = "display:block; position:absolute; overflow:hidden; z-index:1; -webkit-overflow-scrolling:touch; ">
   </div>
   <script src="https://spi.maps.daum.net/imap/map_js_init/postcode.v2.js"></script>
-  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=5f0837f2739fec6df82109b7d5892f3a&libraries=services"></script>
+ 
   <script>
     window.addEventListener("message", onReceivedPostMessage, false);
 
@@ -41,8 +41,7 @@
       new daum.Postcode({
         oncomplete: function(data) {
           var jibunAddress = ""
-          var x = 0.0
-           var y = 0.0
+
           
           if (data.jibunAddress == "") {
             jibunAddress = data.autoJibunAddress
@@ -50,25 +49,15 @@
             jibunAddress = data.jibunAddress
           }
 
-          geocoder.addressSearch(data.roadAddress, (result, status) => {
-              if (status === kakao.maps.services.Status.OK) {
-                  x = result[0].y // 위도
-                  y = result[0].x // 경도
-
-                 var postData = {
-              roadAddress : data.roadAddress,
-              jibunAddress : jibunAddress,
-              zonecode : data.zonecode,
-              x: x,
-              y: y
+             var postData = {
+                roadAddress : data.roadAddress,
+                jibunAddress : jibunAddress,
+                zonecode : data.zonecode,
+          
              };
              
-              window.postMessageToiOS(postData);
-             }
-            
-         });
-            
-
+             window.postMessageToiOS(postData);
+             
              
         },
         width : '100%',
