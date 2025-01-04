@@ -31,36 +31,24 @@
     function postMessageToiOS(postData) {
         window.webkit.messageHandlers.callBackHandler.postMessage(postData);
     }
-    
-    var geocoder = new kakao.maps.services.Geocoder();
+  
     
     var element_layer = document.getElementById('layer');
     function execDaumPostcode() {
       new daum.Postcode({
         oncomplete: function(data) {
           var jibunAddress = ""
-          var x = 0.0
-          var y = 0.0
 
           if (data.jibunAddress == "") {
             jibunAddress = data.autoJibunAddress
           } else if (data.autoJibunAddress == "") {
             jibunAddress = data.jibunAddress
           }
-
-           geocoder.addressSearch(data.roadAddress, (result, status) => {
-              if (status === kakao.maps.services.Status.OK) {
-                x = result[0].y; // 위도
-                y = result[0].x; // 경도
-              }
-          });
              
           var postData = {
               roadAddress : data.roadAddress,
               jibunAddress : jibunAddress,
               zonecode : data.zonecode
-              x: x,
-              y: y,
           };
              
           window.postMessageToiOS(postData);
