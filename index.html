@@ -1,64 +1,45 @@
 <!DOCTYPE html>
+
 <html lang="ko">
   <head>
     <title>주소 찾기</title>
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, height=device-height, initial-scale=1.0"
+      content="width=device-width,height=device-height,initial-scale=1.0"
     />
-    <style>
-      #layer {
-        display: block;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: white;
-        z-index: 1000;
-        overflow: hidden;
-        -webkit-overflow-scrolling: touch;
-        border: 1px solid #ddd; 
-      }
-    </style>
   </head>
   <body onload="execDaumPostcode()">
-    <div id="layer"></div>
+    <div
+      id="layer"
+      style="display:block; position:absolute; overflow:hidden; z-index:1; -webkit-overflow-scrolling:touch; "
+    ></div>
     <script src="https://spi.maps.daum.net/imap/map_js_init/postcode.v2.js"></script>
-    <script
-      type="text/javascript"
-      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=bd725889ed766974afcca35fd687a390&libraries=services"
-    ></script>
     <script>
       window.addEventListener("message", onReceivedPostMessage, false);
 
       function onReceivedPostMessage(event) {
+        //..ex deconstruct event into action & params
         var action = event.data.action;
         var params = event.data.params;
-        console.log("onReceivedPostMessage", event);
+        console.log("onReceivedPostMessage " + event);
       }
 
       function onReceivedActivityMessageViaJavascriptInterface(json) {
+        //..ex deconstruct data into action & params
         var data = JSON.parse(json);
         var action = data.action;
         var params = data.params;
-        console.log(
-          "onReceivedActivityMessageViaJavascriptInterface",
-          data
-        );
+        console.log("onReceivedActivityMessageViaJavascriptInterface " + event);
       }
 
       function postMessageToiOS(postData) {
-        if (window.webkit && window.webkit.messageHandlers.callBackHandler) {
-          window.webkit.messageHandlers.callBackHandler.postMessage(postData);
-        } else {
-          console.error("iOS callBackHandler is not defined.");
-        }
+        window.webkit.messageHandlers.callBackHandler.postMessage(postData);
       }
-
+      
       var geocoder = new kakao.maps.services.Geocoder();
-
+      
+      var element_layer = document.getElementById("layer");
       function execDaumPostcode() {
         var element_layer = document.getElementById("layer");
 
@@ -87,8 +68,26 @@
           width: "100%",
           height: "100%",
         }).embed(element_layer);
-
         element_layer.style.display = "block";
+        initLayerPosition();
+      }
+
+      function initLayerPosition() {
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        var height =
+          window.innerHeight || document.documentElement.clientHeight;
+        element_layer.style.width = width + "px";
+        element_layer.style.height = height + "px";
+        element_layer.style.left =
+          ((window.innerWidth || document.documentElement.clientWidth) -
+            width) /
+            2 +
+          "px";
+        element_layer.style.top =
+          ((window.innerHeight || document.documentElement.clientHeight) -
+            height) /
+            2 +
+          "px";
       }
     </script>
   </body>
