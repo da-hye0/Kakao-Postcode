@@ -40,20 +40,16 @@
     function execDaumPostcode() {
       new daum.Postcode({
         oncomplete: function(data) {
-          var jibunAddress = ""
+          var jibunAddress =  data.autoJibunAddress || data.jibunAddress || ""
+          var buildingName = data.buildingName || ""
           var apartment = data.apartment || "";
-          
-          if (data.jibunAddress == "") {
-            jibunAddress = data.autoJibunAddress
-          } else if (data.autoJibunAddress == "") {
-            jibunAddress = data.jibunAddress
-          }
 
              var postData = {
                 roadAddress : data.roadAddress,
                 jibunAddress : jibunAddress,
                 zonecode : data.zonecode,
                 apartment : apartment
+                buildingName: buildingName
              };
              
              window.postMessageToiOS(postData);             
