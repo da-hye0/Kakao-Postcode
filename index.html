@@ -41,14 +41,14 @@
       new daum.Postcode({
         oncomplete: function(data) {
           var jibunAddress =  data.autoJibunAddress || data.jibunAddress || ""
-          var buildingName = data.buildingName || ""
           var apartment = data.apartment || "";
+          var buildingName = data.buildingName || ""
 
              var postData = {
                 roadAddress : data.roadAddress,
                 jibunAddress : jibunAddress,
                 zonecode : data.zonecode,
-                apartment : apartment
+                apartment : apartment,
                 buildingName: buildingName
              };
              
